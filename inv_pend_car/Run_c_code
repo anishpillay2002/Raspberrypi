@@ -1,0 +1,10 @@
+To commpile c code:
+
+gcc -Wall -o program yourcode.c -lwiringPi
+
+'program' - the application file you want to create .exe
+'yourcode.c' - the c code to compile
+Adding -lwiringPi because we are using that package from wiringpi.com
+
+Execution :
+sudo ./program
