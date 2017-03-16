@@ -5,7 +5,9 @@
 #include <stdint.h>
 #include <sys/time.h>
 #define addr 0x68
-#include <python2.7/Python.h>
+
+static PyObject *
+
 long long current_timestamp()		// Defining a function to calculate current time in milliseconds
 {
 	struct timeval te;
@@ -46,7 +48,7 @@ int main(int argc,char*argv[])
 		float info_arr[10000][7];
 		
 		wiringPiI2CWriteReg8(fd, 0x6B, 0);
-		while((float)((step_time-start_time)/1000)<10)
+		while((float)((step_time-start_time)/1000)<20)
 		{
 			AccxH=wiringPiI2CReadReg8(fd,0x3B);		// Reading all registers for accelerometer Refer MPU6050 document for map and description	
 			AccxL=wiringPiI2CReadReg8(fd,0x3C);
@@ -88,21 +90,12 @@ int main(int argc,char*argv[])
 			printf("%d",i);
 			usleep(100000);
 		}
-		int k=0;
-		
-		FILE *temp=fopen("data.temp","w");
+		FILE * gnuplotPipe =popem("gnuplot -persistent","w");
 		for (k=0;k<i;k++)
 		{
-			fprintf(temp,"%lf %lf \n",info_arr[k][0],info_arr[k][1]);
+			fprintf(gnuplotPipe,"%lf %lf\n",info_arr[i][0],info_arr[i][1]);
 		}
-		FILE * gnuplotPipe =popen("gnuplot -persistent","w");
-		for (k=0;k<i;k++)
-		{
-			fprintf(gnuplotPipe,"plot 'data.temp' with lines \n");
-		}
-		
-	
-		
+		fprintf(gnuplotPipe,"e");
 	
 	
 	}
